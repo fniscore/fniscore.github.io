@@ -50,7 +50,7 @@
                                     <label class="align-middle" for="floatingInputAST">AST</label>
                                 </div>
                                 <div class="d-inline-flex justify-content-center bd-highlight bg-success">
-                                    <label class="align-middle m-2" for="floatingInputAST">U/L</label>
+                                    <label class="align-middle m-1" for="floatingInputAST">U/L</label>
                                 </div>
                             </div>
                         </div>
@@ -81,10 +81,12 @@
                                 </div>
                                 <div class="mx-1 d-inline-flex justify-content-center flex-row bd-highlight">
                                     <input type="radio" class="btn-check" name="options-HDL" id="HDL_mgdl" autocomplete="off" checked>
-                                    <label class="btn btn-outline-primary" for="HDL_mgdl" data-toggle="tooltip" data-placement="top" title="HDL (mg/dL) = HDL (mmol/L)*38.67">mg/dL</label>
+                                    <label class="btn btn-outline-primary" for="HDL_mgdl" >mg/dL</label>
+<!--                                    data-toggle="tooltip" data-placement="top" title="HDL (mg/dL) = HDL (mmol/L)*38.67"-->
 
                                     <input type="radio" class="btn-check" name="options-HDL" id="HDL_mmoll" autocomplete="off">
-                                    <label class="btn btn-outline-warning mx-1" for="HDL_mmoll" data-toggle="tooltip" data-placement="top" title="HDL (mg/dL) = HDL (mmol/L)*38.67">mmol/L</label>
+                                    <label class="btn btn-outline-warning mx-1" for="HDL_mmoll" >mmol/L</label>
+<!--                                    data-toggle="tooltip" data-placement="top" title="HDL (mg/dL) = HDL (mmol/L)*38.67"-->
                                 </div>
                             </div>
 
@@ -101,12 +103,12 @@
                         <input type="text" class="form-control" id="pni_value"  style="text-align:center;" placeholder="NaN" value="NaN" disabled>
                         <label class="align-middle" for="floatingInputHDL">PNI</label>
                     </div>
-                    <div class="d-inline-flex align-middle ps-2 pb-3 mb-2 text-warning"><b>% probability of<br>progressive NASH</b></div>
+                    <div id="pni_percentage" class="d-inline-flex align-middle ps-2 pb-3 mb-2 text-warning"><b>% predicted probability<br>of progressive NASH</b></div>
                 </div>
 
                 <p class="m-3"><b>Disclaimer notice:</b> It is important for bear in mind that this is not a medical device and creators are not responsible for the use of the algorithm in a clinical setting.</p>
 
-                <a class="btn btn-lg btn-light mt-5 mb-0" href="#wstt">Who should take the test?</a>
+<!--                <a class="btn btn-lg btn-light mt-5 mb-0" href="#wstt">Who should take the test?</a>-->
             </div>
         </header>
         <!-- Overview section-->
@@ -314,10 +316,13 @@
                 var hba1c = hba1c_percentage ? hba1c_val : (hba1c_val / 10.929) + 2.15;
                 var hdl = hdl_mdgl ? hdl_val: hdl_val * 38.67;
                 let temp = Math.exp(-10.33+2.54*Math.log(ast)+3.86*Math.log(hba1c)-1.66*Math.log(hdl));
-                let pni = String(expo((temp/(1+temp)), 3));
-                document.getElementById("pni_value").value = pni;
+                let pni = expo((temp/(1+temp)), 3);
+                document.getElementById("pni_value").value = String(pni);
+                pni_perc = String(pni*100)
+                document.getElementById("pni_percentage").innerHTML =pni_perc + "% predicted probability<br>of progressive NASH";
             } else {
                 document.getElementById("pni_value").value = "NaN";
+                document.getElementById("pni_percentage").innerHTML =  "% predicted probability<br>of progressive NASH";
             }
 
         }

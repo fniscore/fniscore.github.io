@@ -311,9 +311,9 @@
             if (ast && hba1c_val && hdl_val){
                 var hba1c_percentage = document.getElementById('HbA1c_percentage').checked;
                 var hdl_mdgl = document.getElementById('HDL_mgdl').checked;
-                var hba1c = hba1c_percentage ? (hba1c_val / 10.929) + 2.15 : hba1c_val;
-                var hdl = hdl_mdgl ? hdl_val * 38.67 : hdl_val;
-                let temp = Math.exp(-10.33+2.54*Math.log(ast)+3.86*Math.log(hba1c)-1.66*Math.log(hdl))/(1+Math.exp(3));
+                var hba1c = hba1c_percentage ? hba1c_val : (hba1c_val / 10.929) + 2.15;
+                var hdl = hdl_mdgl ? hdl_val: hdl_val * 38.67;
+                let temp = Math.exp(-10.33+2.54*Math.log(ast)+3.86*Math.log(hba1c)-1.66*Math.log(hdl));
                 let pni = String(expo((temp/(1+temp)), 3));
                 document.getElementById("pni_value").value = pni;
             } else {

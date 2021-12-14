@@ -41,61 +41,57 @@
                 <h1 class="fw-bolder">Progressive NASH Index (PNI) Calculator</h1>
 
                 <!-- calculator -->
-                <div class="flex-row justify-content-around m-5 bd-highlight mb-3">
-                    <div class="row">
-                        <div class="col-sm-3 container mx-1 my-2 justify-content-center bd-highlight">
-                            <div class="flex-row justify-content-center bd-highlight">
-                                <div class="col-sm-8 d-inline-flex form-floating text-dark">
+                <div class="m-5 bd-highlight mb-3">
+                    <div class="justify-content-around row">
+                        <div class="col container mx-1 my-2 justify-content-center bd-highlight">
+                            <div class="d-inline-flex justify-content-center bd-highlight">
+                                <div style="min-width: 150px" class="d-inline-flex form-floating text-dark">
                                     <input type="number" class="form-control" id="floatingInputAST" placeholder="U/L" value="">
                                     <label class="align-middle" for="floatingInputAST">AST</label>
                                 </div>
-                                <div class="d-inline-flex justify-content-center bd-highlight bg-success">
-                                    <label class="align-middle m-1" for="floatingInputAST">U/L</label>
+                                <div class="mx-1 d-inline-flex justify-content-center bd-highlight">
+                                    <input type="radio" class="btn btn-check" name="options-AST" id="AST_UToL" autocomplete="off"  checked>
+                                    <label class="btn btn-outline-primary" for="AST_UToL">U/L</label>
+
+                                    <input type="radio" class="btn btn-check" name="options-AST" id="AST_MuKatToL" autocomplete="off" >
+                                    <label class="btn btn-outline-warning mx-1" for="AST_MuKatToL" >µkat/L</label>
                                 </div>
                             </div>
                         </div>
 
-
-                        <div class="col-sm-4 container mx-2 my-2 justify-content-center bd-highlight">
-                            <div class="flex-row d-inline-flex">
-                                <div class="col-sm-8 d-inline-flex form-floating text-dark">
+                        <div class="col container mx-1 my-2 justify-content-center bd-highlight">
+                            <div class="d-inline-flex justify-content-center bd-highlight">
+                                <div style="min-width: 150px" class="d-inline-flex form-floating text-dark">
                                     <input type="number" class="form-control" id="floatingInputHbA1c" placeholder="U/L" value="">
                                     <label class="align-middle" for="floatingInputHbA1c">HbA1c</label>
                                 </div>
                                 <div class="mx-1 d-inline-flex justify-content-center bd-highlight">
                                     <input type="radio" class="btn btn-check" name="options-HbA1c" id="HbA1c_percentage" autocomplete="off"  checked>
                                     <label class="btn btn-outline-primary" for="HbA1c_percentage">%</label>
-<!--                                    title="HbA1c (%) = (HbA1c mmol/mol /10.929) + 2.15" data-toggle="tooltip"-->
 
                                     <input type="radio" class="btn btn-check" name="options-HbA1c" id="HbA1c_percentage_mmoll" autocomplete="off" >
                                     <label class="btn btn-outline-warning mx-1" for="HbA1c_percentage_mmoll" >mmol/mol</label>
-<!--                                    title="HbA1c (%) = (HbA1c mmol/mol /10.929) + 2.15" data-toggle="tooltip"-->
                                 </div>
                             </div>
                         </div>
 
-
-                        <div class="col-sm-4 container mx-2 my-2 justify-content-center bd-highlight">
-                            <div class="flex-row d-inline-flex">
-                                <div class="col-sm-8 d-inline-flex form-floating text-dark">
+                        <div class="col container mx-1 my-2 justify-content-center bd-highlight">
+                            <div class="d-inline-flex justify-content-center bd-highlight">
+                                <div style="min-width: 150px" class="d-inline-flex form-floating text-dark">
                                     <input type="number" class="form-control" id="floatingInputHDL" placeholder="U/L" value="">
                                     <label class="align-middle" for="floatingInputHDL">HDL</label>
                                 </div>
-                                <div class="mx-1 d-inline-flex justify-content-center flex-row bd-highlight">
+                                <div class="mx-1 d-inline-flex justify-content-center bd-highlight">
                                     <input type="radio" class="btn-check" name="options-HDL" id="HDL_mgdl" autocomplete="off" checked>
                                     <label class="btn btn-outline-primary" for="HDL_mgdl" >mg/dL</label>
-<!--                                    data-toggle="tooltip" data-placement="top" title="HDL (mg/dL) = HDL (mmol/L)*38.67"-->
+                                    <!--                                    data-toggle="tooltip" data-placement="top" title="HDL (mg/dL) = HDL (mmol/L)*38.67"-->
 
                                     <input type="radio" class="btn-check" name="options-HDL" id="HDL_mmoll" autocomplete="off">
                                     <label class="btn btn-outline-warning mx-1" for="HDL_mmoll" >mmol/L</label>
-<!--                                    data-toggle="tooltip" data-placement="top" title="HDL (mg/dL) = HDL (mmol/L)*38.67"-->
                                 </div>
                             </div>
-
-    <!--                        <label class="m-2 align-middle" id="floatingInputHDLLabel" for="floatingInputHDL">mg/dL</label>-->
-
-    <!--                        <label class="m-2 align-middle" id="floatingInputHDLLabelLabel" for="floatingInputHDLLabel">mmol/L**</label>-->
                         </div>
+
                     </div>
                     <hr/>
                 </div>
@@ -309,12 +305,14 @@
         }
 
         function myFunction() {
-            var ast = parseFloat(document.getElementById("floatingInputAST").value);
+            var ast_val = parseFloat(document.getElementById("floatingInputAST").value);
             var hba1c_val = parseFloat(document.getElementById("floatingInputHbA1c").value);
             var hdl_val = parseFloat(document.getElementById("floatingInputHDL").value);
-            if (ast && hba1c_val && hdl_val){
+            if (ast_val && hba1c_val && hdl_val){
+                var ast_utol = document.getElementById('AST_UToL').checked;
                 var hba1c_percentage = document.getElementById('HbA1c_percentage').checked;
                 var hdl_mdgl = document.getElementById('HDL_mgdl').checked;
+                var ast = ast_utol ? ast_val : ast_val / 0.0166
                 var hba1c = hba1c_percentage ? hba1c_val : (hba1c_val / 10.929) + 2.15;
                 var hdl = hdl_mdgl ? hdl_val: hdl_val * 38.67;
                 let temp = Math.exp(-10.33+2.54*Math.log(ast)+3.86*Math.log(hba1c)-1.66*Math.log(hdl));
@@ -331,6 +329,8 @@
         document.getElementById("floatingInputAST").addEventListener("input", myFunction);
         document.getElementById("floatingInputHbA1c").addEventListener("input", myFunction);
         document.getElementById("floatingInputHDL").addEventListener("input", myFunction);
+        document.getElementById("AST_UToL").addEventListener("click", myFunction);
+        document.getElementById("AST_MuKatToL").addEventListener("click", myFunction);
         document.getElementById("HbA1c_percentage").addEventListener("click", myFunction);
         document.getElementById("HbA1c_percentage_mmoll").addEventListener("click", myFunction);
         document.getElementById("HDL_mgdl").addEventListener("click", myFunction);

@@ -43,9 +43,9 @@
                 <!-- calculator -->
                 <div class="m-5 bd-highlight mb-3">
                     <div class="justify-content-around row">
-                        <div class="col container mx-1 my-2 justify-content-center bd-highlight">
+                        <div class="col form-check container mx-1 my-2 justify-content-center bd-highlight">
                             <div class="d-inline-flex justify-content-center bd-highlight">
-                                <div style="min-width: 150px" class="d-inline-flex form-floating text-dark">
+                                <div id="astForm" style="min-width: 10rem" class="d-inline-flex form-floating text-dark" data-bs-toggle="tooltip" data-bs-placement="top" title="Hooray!">
                                     <input type="number" class="form-control" id="floatingInputAST" placeholder="U/L" value="">
                                     <label class="align-middle" for="floatingInputAST">AST</label>
                                 </div>
@@ -57,11 +57,13 @@
                                     <label class="btn btn-outline-warning mx-1" for="AST_MuKatToL" >µkat/L</label>
                                 </div>
                             </div>
+                            <div id='astError' class="bg-danger mx-0 bd-highlight" style="display:none"></div>
+
                         </div>
 
                         <div class="col container mx-1 my-2 justify-content-center bd-highlight">
                             <div class="d-inline-flex justify-content-center bd-highlight">
-                                <div style="min-width: 150px" class="d-inline-flex form-floating text-dark">
+                                <div style="min-width: 10rem" class="d-inline-flex form-floating text-dark">
                                     <input type="number" class="form-control" id="floatingInputHbA1c" placeholder="U/L" value="">
                                     <label class="align-middle" for="floatingInputHbA1c">HbA1c</label>
                                 </div>
@@ -73,11 +75,12 @@
                                     <label class="btn btn-outline-warning mx-1" for="HbA1c_percentage_mmoll" >mmol/mol</label>
                                 </div>
                             </div>
+                            <div id='hba1cError' class="bg-danger mx-1 bd-highlight" style="display:none"></div>
                         </div>
 
                         <div class="col container mx-1 my-2 justify-content-center bd-highlight">
                             <div class="d-inline-flex justify-content-center bd-highlight">
-                                <div style="min-width: 150px" class="d-inline-flex form-floating text-dark">
+                                <div style="min-width: 10rem" class="d-inline-flex form-floating text-dark">
                                     <input type="number" class="form-control" id="floatingInputHDL" placeholder="U/L" value="">
                                     <label class="align-middle" for="floatingInputHDL">HDL</label>
                                 </div>
@@ -90,6 +93,7 @@
                                     <label class="btn btn-outline-warning mx-1" for="HDL_mmoll" >mmol/L</label>
                                 </div>
                             </div>
+                            <div id='hdlError' class="bg-danger mx-1 bd-highlight" style="display:none"></div>
                         </div>
 
                     </div>
@@ -267,7 +271,14 @@
                 <div class="row gx-4 justify-content-center">
                     <div class="col-lg-8">
                         <h2>Contact us</h2>
-                        <p class="lead"></p>
+                        <p class="lead">
+                            Stefano Romeo, MD, PhD<br>
+                            Professor in Molecular and Clinical Medicine<br>
+                            University of Gothenburg, Institute of Medicine, Sahlgrenska Academy<br>
+                            Wallenberg Laboratory, Bruna Stråket 16<br>
+                            41345 Gothenburg, Sweden<br>
+                            Email: stefano [dot] romeo [at] wlab [dot] gu [dot] se
+                        </p>
                     </div>
                 </div>
             </div>
@@ -293,13 +304,95 @@
         <script src="js/scripts.js"></script>
     </body>
 
-    <script>
-        $(document).ready(function(){
-            $('[data-toggle="tooltip"]').tooltip();
-        });
-    </script>
+<!--    <script>-->
+<!--        $(document).ready(function(){-->
+<!--            $('[data-toggle="tooltip"]').tooltip();-->
+<!--        });-->
+<!--    </script>-->
 
     <script>
+        function astValidation() {
+            var ast_utol = document.getElementById('AST_UToL').checked;
+            var text_field = document.getElementById("floatingInputAST")
+            var error_field = document.getElementById("astError")
+            var entered_value = parseFloat(text_field.value);
+            if (!entered_value) {
+                error_field.style.display = "none";
+            } else if (ast_utol) {
+                if (entered_value < 0 || entered_value > 35) {
+                    error_field.style.display = "";
+                    text_field.classList.add("is-invalid")
+                    error_field.innerHTML = String(entered_value) + ' is not the valid range [0, 35].';
+                } else {
+                    error_field.style.display = "none";
+                    text_field.classList.remove("is-invalid")
+                    error_field.innerHTML = '';
+                }
+            } else {
+                if (entered_value < 0 || entered_value > 0.58) {
+                    error_field.style.display = "";
+                    text_field.classList.add("is-invalid")
+                    error_field.innerHTML =  String(entered_value) + ' is not the valid range [0, 0.58].';
+                } else {
+                    error_field.style.display = "none";
+                    text_field.classList.remove("is-invalid")
+                    error_field.innerHTML = '';
+                }
+            }
+        }
+
+        function hba1cValidation() {
+            var ast_utol = document.getElementById('HbA1c_percentage').checked;
+            var text_field = document.getElementById("floatingInputHbA1c")
+            var error_field = document.getElementById("hba1cError")
+            var entered_value = parseFloat(text_field.value);
+            if (!entered_value) {
+                error_field.style.display = "none";
+            } else if (ast_utol) {
+                if (entered_value < 0 || entered_value > 35) {
+                    error_field.style.display = "";
+                    error_field.innerHTML = String(entered_value) + ' is not the valid range [0, 35].';
+                } else {
+                    error_field.style.display = "none";
+                    error_field.innerHTML = '';
+                }
+            } else {
+                if (entered_value < 0 || entered_value > 0.58) {
+                    error_field.style.display = "";
+                    error_field.innerHTML =  String(entered_value) + ' is not the valid range [0, 0.58].';
+                } else {
+                    error_field.style.display = "none";
+                    error_field.innerHTML = '';
+                }
+            }
+        }
+
+        function hdlValidation() {
+            var ast_utol = document.getElementById('HDL_mgdl').checked;
+            var text_field = document.getElementById("floatingInputHDL")
+            var error_field = document.getElementById("hdlError")
+            var entered_value = parseFloat(text_field.value);
+            if (!entered_value) {
+                error_field.style.display = "none";
+            } else if (ast_utol) {
+                if (entered_value < 0.2 || entered_value > 35) {
+                    error_field.style.display = "";
+                    error_field.innerHTML = String(entered_value) + ' is not the valid range [0, 35].';
+                } else {
+                    error_field.style.display = "none";
+                    error_field.innerHTML = '';
+                }
+            } else {
+                if (entered_value < 0.2 || entered_value > 4.5) {
+                    error_field.style.display = "";
+                    error_field.innerHTML =  String(entered_value) + ' is not the valid range [0, 0.58].';
+                } else {
+                    error_field.style.display = "none";
+                    error_field.innerHTML = '';
+                }
+            }
+        }
+
         function expo(x, f) {
             return Number.parseFloat(x).toExponential(f);
         }
@@ -319,22 +412,38 @@
                 let pni = (temp/(1+temp)).toFixed(2);
                 document.getElementById("pni_value").value = String(pni);
                 pni_perc = String(Math.round(pni*100))
-                document.getElementById("pni_percentage").innerHTML =pni_perc + "% predicted probability<br>of progressive NASH";
+                document.getElementById("pni_percentage").innerHTML = pni_perc + "% predicted probability<br>of progressive NASH";
             } else {
                 document.getElementById("pni_value").value = "NaN";
                 document.getElementById("pni_percentage").innerHTML =  "% predicted probability<br>of progressive NASH";
             }
 
         }
-        document.getElementById("floatingInputAST").addEventListener("input", myFunction);
-        document.getElementById("floatingInputHbA1c").addEventListener("input", myFunction);
-        document.getElementById("floatingInputHDL").addEventListener("input", myFunction);
-        document.getElementById("AST_UToL").addEventListener("click", myFunction);
-        document.getElementById("AST_MuKatToL").addEventListener("click", myFunction);
-        document.getElementById("HbA1c_percentage").addEventListener("click", myFunction);
-        document.getElementById("HbA1c_percentage_mmoll").addEventListener("click", myFunction);
-        document.getElementById("HDL_mgdl").addEventListener("click", myFunction);
-        document.getElementById("HDL_mmoll").addEventListener("click", myFunction);
+
+        function check_ast_range() {
+            // astValidation()
+            myFunction()
+        }
+
+        function check_hba1c_range() {
+            // hba1cValidation()
+            myFunction()
+        }
+
+        function check_hdl_range() {
+            // hdlValidation()
+            myFunction()
+        }
+
+        document.getElementById("floatingInputAST").addEventListener("input", check_ast_range);
+        document.getElementById("floatingInputHbA1c").addEventListener("input", check_hba1c_range);
+        document.getElementById("floatingInputHDL").addEventListener("input", check_hdl_range);
+        document.getElementById("AST_UToL").addEventListener("click", check_ast_range);
+        document.getElementById("AST_MuKatToL").addEventListener("click", check_ast_range);
+        document.getElementById("HbA1c_percentage").addEventListener("click", check_hba1c_range);
+        document.getElementById("HbA1c_percentage_mmoll").addEventListener("click", check_hba1c_range);
+        document.getElementById("HDL_mgdl").addEventListener("click", check_hdl_range);
+        document.getElementById("HDL_mmoll").addEventListener("click", check_hdl_range);
     </script>
 
 

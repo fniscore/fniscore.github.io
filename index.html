@@ -45,8 +45,8 @@
                     <div class="justify-content-around row">
                         <div class="col form-check container mx-1 my-2 justify-content-center bd-highlight">
                             <div class="d-inline-flex justify-content-center bd-highlight">
-                                <div id="astForm" style="min-width: 10rem" class="d-inline-flex form-floating text-dark" data-bs-toggle="tooltip" data-bs-placement="top" title="Hooray!">
-                                    <input type="number" class="form-control" id="floatingInputAST" placeholder="U/L" value="">
+                                <div id="astForm" style="min-width: 10rem" class="d-inline-flex form-floating text-dark">
+                                    <input type="number" class="form-control" id="floatingInputAST" placeholder="U/L" value="" data-bs-toggle="invalid-tooltip" data-bs-placement="top" data-bs-trigger="manual">
                                     <label class="align-middle" for="floatingInputAST">AST</label>
                                 </div>
                                 <div class="mx-1 d-inline-flex justify-content-center bd-highlight">
@@ -57,14 +57,14 @@
                                     <label class="btn btn-outline-warning mx-1" for="AST_MuKatToL" >µkat/L</label>
                                 </div>
                             </div>
-                            <div id='astError' class="bg-danger mx-0 bd-highlight" style="display:none"></div>
+<!--                            <div id='astError' class="bg-danger mx-0 bd-highlight" style="display:none"></div>-->
 
                         </div>
 
                         <div class="col container mx-1 my-2 justify-content-center bd-highlight">
                             <div class="d-inline-flex justify-content-center bd-highlight">
                                 <div style="min-width: 10rem" class="d-inline-flex form-floating text-dark">
-                                    <input type="number" class="form-control" id="floatingInputHbA1c" placeholder="U/L" value="">
+                                    <input type="number" class="form-control" id="floatingInputHbA1c" placeholder="U/L" value="" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-trigger="manual">
                                     <label class="align-middle" for="floatingInputHbA1c">HbA1c</label>
                                 </div>
                                 <div class="mx-1 d-inline-flex justify-content-center bd-highlight">
@@ -75,13 +75,13 @@
                                     <label class="btn btn-outline-warning mx-1" for="HbA1c_percentage_mmoll" >mmol/mol</label>
                                 </div>
                             </div>
-                            <div id='hba1cError' class="bg-danger mx-1 bd-highlight" style="display:none"></div>
+<!--                            <div id='hba1cError' class="bg-danger mx-1 bd-highlight" style="display:none"></div>-->
                         </div>
 
                         <div class="col container mx-1 my-2 justify-content-center bd-highlight">
                             <div class="d-inline-flex justify-content-center bd-highlight">
                                 <div style="min-width: 10rem" class="d-inline-flex form-floating text-dark">
-                                    <input type="number" class="form-control" id="floatingInputHDL" placeholder="U/L" value="">
+                                    <input type="number" class="form-control" id="floatingInputHDL" placeholder="U/L" value="" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-trigger="manual">
                                     <label class="align-middle" for="floatingInputHDL">HDL</label>
                                 </div>
                                 <div class="mx-1 d-inline-flex justify-content-center bd-highlight">
@@ -93,7 +93,7 @@
                                     <label class="btn btn-outline-warning mx-1" for="HDL_mmoll" >mmol/L</label>
                                 </div>
                             </div>
-                            <div id='hdlError' class="bg-danger mx-1 bd-highlight" style="display:none"></div>
+<!--                            <div id='hdlError' class="bg-danger mx-1 bd-highlight" style="display:none"></div>-->
                         </div>
 
                     </div>
@@ -184,7 +184,12 @@
                         <p class>Progressive NASH: histological diagnosis of NASH + elevated NAS score (NAS≥4) + significant fibrosis (F≥2)</p>
 
                         <h3 class="fw-bolder mb-3" id="formula">Formula</h3>
-                        $$PNI = \dfrac{e^{\left(-10.33+2.54 \times \ln \left(AST \left[ U/L\right] \right) + 3.86 \times \ln \left(HbA1c \left[ \%\right] \right) - 1.66 \times \ln \left(HDL \left[ mg/dL \right] \right) \right)}}{ 1+e^{\left(-10.33+2.54 \times \ln \left(AST \left[ U/L\right] \right) + 3.86 \times \ln \left(HbA1c \left[ \%\right] \right) - 1.66 \times \ln \left(HDL \left[ mg/dL \right] \right) \right)}}$$
+                        $$PNI = \dfrac{e^{\left(\alpha + \beta + \gamma \right)}}{ 1+e^{\left(\alpha + \beta + \gamma \right)}};$$ <br>
+                        where:<br>
+                        $$\alpha = -10.33+2.54 \times \ln \left(AST \left[ U/L\right] \right);$$ <br>
+                        $$\beta = +3.86 \times \ln \left(HbA1c \left[ \%\right] \right);$$ <br>
+                        $$\gamma = -1.66 \times \ln \left(HDL \left[ mg/dL \right] \right);$$ <br>
+
                         <p>
                             The score was developed in the derivation cohort (264 morbidly obese individuals) using a bootstrapping stepwise logistic regression model (2000 bootstrap samples). The score was derived based on the final predictors and the corresponding regression coefficients. Performance for progressive NASH was assessed by the receiver operating characteristic curve (AUROC). Rule-out and rule-in cut-offs were derived based on sensitivity ≥0.89 and specificity ≥0.90, respectively.
                         </p>
@@ -311,32 +316,38 @@
 <!--    </script>-->
 
     <script>
+        function tooltip_handler(element_id, title, show) {
+            var element_instance = document.getElementById(element_id);
+            element_instance.setAttribute('data-bs-original-title', title);
+            let tooltip = bootstrap.Tooltip.getOrCreateInstance(element_instance);
+            if (show) {
+                tooltip.show()
+                element_instance.classList.add("is-invalid")
+            } else {
+                tooltip.hide()
+                element_instance.classList.remove("is-invalid")
+            }
+
+        }
         function astValidation() {
             var ast_utol = document.getElementById('AST_UToL').checked;
             var text_field = document.getElementById("floatingInputAST")
-            var error_field = document.getElementById("astError")
+            // var error_field = document.getElementById("astError")
             var entered_value = parseFloat(text_field.value);
+
             if (!entered_value) {
-                error_field.style.display = "none";
+                tooltip_handler("floatingInputAST", '', false)
             } else if (ast_utol) {
-                if (entered_value < 0 || entered_value > 35) {
-                    error_field.style.display = "";
-                    text_field.classList.add("is-invalid")
-                    error_field.innerHTML = String(entered_value) + ' is not the valid range [0, 35].';
+                if (entered_value < 3.3 || entered_value > 947.5) {
+                    tooltip_handler("floatingInputAST", String(entered_value) + ' is not the valid range [3.3, 947.5].', true)
                 } else {
-                    error_field.style.display = "none";
-                    text_field.classList.remove("is-invalid")
-                    error_field.innerHTML = '';
+                    tooltip_handler("floatingInputAST", '', false)
                 }
             } else {
-                if (entered_value < 0 || entered_value > 0.58) {
-                    error_field.style.display = "";
-                    text_field.classList.add("is-invalid")
-                    error_field.innerHTML =  String(entered_value) + ' is not the valid range [0, 0.58].';
+                if (entered_value < 0.06 || entered_value > 16) {
+                    tooltip_handler("floatingInputAST", String(entered_value) + ' is not the valid range [0.06, 16].', true)
                 } else {
-                    error_field.style.display = "none";
-                    text_field.classList.remove("is-invalid")
-                    error_field.innerHTML = '';
+                    tooltip_handler("floatingInputAST", '', false)
                 }
             }
         }
@@ -344,25 +355,22 @@
         function hba1cValidation() {
             var ast_utol = document.getElementById('HbA1c_percentage').checked;
             var text_field = document.getElementById("floatingInputHbA1c")
-            var error_field = document.getElementById("hba1cError")
             var entered_value = parseFloat(text_field.value);
             if (!entered_value) {
-                error_field.style.display = "none";
+                tooltip_handler("floatingInputHbA1c", '', false)
             } else if (ast_utol) {
-                if (entered_value < 0 || entered_value > 35) {
-                    error_field.style.display = "";
-                    error_field.innerHTML = String(entered_value) + ' is not the valid range [0, 35].';
+                if (entered_value < 2.6 || entered_value > 49.5) {
+                    tooltip_handler("floatingInputHbA1c", String(entered_value) + ' is not the valid range [2.6, 49.5].', true)
+                    // error_field.innerHTML = String(entered_value) + ' is not the valid range [2.6, 49.5].';
                 } else {
-                    error_field.style.display = "none";
-                    error_field.innerHTML = '';
+                    tooltip_handler("floatingInputHbA1c", '', false)
                 }
             } else {
-                if (entered_value < 0 || entered_value > 0.58) {
-                    error_field.style.display = "";
-                    error_field.innerHTML =  String(entered_value) + ' is not the valid range [0, 0.58].';
+                if (entered_value < 5 || entered_value > 515.5) {
+                    tooltip_handler("floatingInputHbA1c", String(entered_value) + ' is not the valid range [5, 515.5].', true)
+                    // error_field.innerHTML =  String(entered_value) + ' is not the valid range [5, 515.5].';
                 } else {
-                    error_field.style.display = "none";
-                    error_field.innerHTML = '';
+                    tooltip_handler("floatingInputHbA1c", '', false)
                 }
             }
         }
@@ -370,25 +378,22 @@
         function hdlValidation() {
             var ast_utol = document.getElementById('HDL_mgdl').checked;
             var text_field = document.getElementById("floatingInputHDL")
-            var error_field = document.getElementById("hdlError")
             var entered_value = parseFloat(text_field.value);
             if (!entered_value) {
-                error_field.style.display = "none";
+                tooltip_handler("floatingInputHDL", '', false)
             } else if (ast_utol) {
-                if (entered_value < 0.2 || entered_value > 35) {
-                    error_field.style.display = "";
-                    error_field.innerHTML = String(entered_value) + ' is not the valid range [0, 35].';
+                if (entered_value < 7.7 || entered_value > 174) {
+                    tooltip_handler("floatingInputHDL", String(entered_value) + ' is not the valid range [7.7, 174].', true)
+                    // error_field.innerHTML = String(entered_value) + ' is not the valid range [7.7, 174].';
                 } else {
-                    error_field.style.display = "none";
-                    error_field.innerHTML = '';
+                    tooltip_handler("floatingInputHDL", '', false)
                 }
             } else {
                 if (entered_value < 0.2 || entered_value > 4.5) {
-                    error_field.style.display = "";
-                    error_field.innerHTML =  String(entered_value) + ' is not the valid range [0, 0.58].';
+                    tooltip_handler("floatingInputHDL", String(entered_value) + ' is not the valid range [0.2, 4.5].', true)
+                    // error_field.innerHTML =  String(entered_value) + ' is not the valid range [0.2, 4.5].';
                 } else {
-                    error_field.style.display = "none";
-                    error_field.innerHTML = '';
+                    tooltip_handler("floatingInputHDL", '', false)
                 }
             }
         }
@@ -421,17 +426,17 @@
         }
 
         function check_ast_range() {
-            // astValidation()
+            astValidation()
             myFunction()
         }
 
         function check_hba1c_range() {
-            // hba1cValidation()
+            hba1cValidation()
             myFunction()
         }
 
         function check_hdl_range() {
-            // hdlValidation()
+            hdlValidation()
             myFunction()
         }
 

@@ -5806,7 +5806,7 @@ textarea.form-control-lg {
 .bs-tooltip-top .tooltip-arrow::before, .bs-tooltip-auto[data-popper-placement^=top] .tooltip-arrow::before {
   top: -1px;
   border-width: 0.4rem 0.4rem 0;
-  border-top-color: #000;
+  border-top-color: rgba(var(--bs-danger-rgb), 0.85) !important;
 }
 
 .bs-tooltip-end, .bs-tooltip-auto[data-popper-placement^=right] {
@@ -5854,7 +5854,7 @@ textarea.form-control-lg {
   padding: 0.25rem 0.5rem;
   color: #fff;
   text-align: center;
-  background-color: #000;
+  background-color: rgba(var(--bs-danger-rgb), 0.95) !important;
   border-radius: 0.25rem;
 }
 
@@ -11297,6 +11297,7 @@ hr {
   margin: 2em 0;
   padding: 0;
 }
+
 
 /* Chrome, Safari, Edge, Opera */
 input[type=number]::-webkit-inner-spin-button,

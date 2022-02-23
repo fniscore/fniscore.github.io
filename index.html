@@ -102,10 +102,10 @@
 
                 <div class="flex-row justify-content-center">
                     <div class="d-inline-flex form-floating p-1 text-dark">
-                        <input type="text" class="form-control" id="pni_value"  style="text-align:center;" placeholder="NaN" value="NaN" disabled>
-                        <label class="align-middle" for="floatingInputHDL">PNI</label>
+                        <input type="text" class="form-control" id="FNI_value"  style="text-align:center;" placeholder="NaN" value="NaN" disabled>
+                        <label class="align-middle" for="floatingInputHDL">FNI</label>
                     </div>
-                    <div id="pni_percentage" class="d-inline-flex align-middle ps-2 pb-3 mb-2 text-warning"><b>% predicted probability<br>of progressive NASH</b></div>
+                    <div id="FNI_percentage" class="d-inline-flex align-middle ps-2 pb-3 mb-2 text-warning"><b>% predicted probability<br>of Fibrotic NASH</b></div>
                 </div>
 
                 <p class="m-3"><b>Disclaimer notice:</b> It is important to bear in mind that this is not a medical device and creators are not responsible for the use of the algorithm in a clinical setting.</p>
@@ -181,21 +181,23 @@
                         </table>
 
                         <h3 class="fw-bolder mb-3" id="outcome">Outcome</h3>
-                        <p class>Progressive NASH: histological diagnosis of NASH + elevated NAS score (NAS≥4) + significant fibrosis (F≥2)</p>
+                        <p class>•	Fibrotic NASH: histological diagnosis of NASH + elevated NAS score (NAS≥4) + significant fibrosis (F≥2)</p>
 
                         <h3 class="fw-bolder mb-3" id="formula">Formula</h3>
-                        $$PNI = \dfrac{e^{\left(\alpha + \beta + \gamma \right)}}{ 1+e^{\left(\alpha + \beta + \gamma \right)}};$$ <br>
+                        $$FNI = \dfrac{e^{\left(\alpha + \beta + \gamma + \delta \right)}}{ 1+e^{\left(\alpha + \beta + \gamma + \delta \right)}};$$ <br>
                         where:<br>
-                        $$\alpha = -10.33+2.54 \times \ln \left(AST \left[ U/L\right] \right);$$ <br>
-                        $$\beta = +3.86 \times \ln \left(HbA1c \left[ \%\right] \right);$$ <br>
-                        $$\gamma = -1.66 \times \ln \left(HDL \left[ mg/dL \right] \right);$$ <br>
+                        $$\alpha = -10.33;$$ <br>
+                        $$\beta = +2.54 \times \ln \left(AST \left[ U/L\right] \right);$$ <br>
+                        $$\gamma = +3.86 \times \ln \left(HbA1c \left[ \%\right] \right);$$ <br>
+
+                        $$\delta = -1.66 \times \ln \left(HDL \left[ mg/dL \right] \right);$$ <br>
 
                         <p>
-                            The score was developed in the derivation cohort (264 morbidly obese individuals) using a bootstrapping stepwise logistic regression model (2000 bootstrap samples). The score was derived based on the final predictors and the corresponding regression coefficients. Performance for progressive NASH was assessed by the receiver operating characteristic curve (AUROC). Rule-out and rule-in cut-offs were derived based on sensitivity ≥0.89 and specificity ≥0.90, respectively.
+                            The score was developed in the derivation cohort (264 morbidly obese individuals) using a bootstrapping stepwise logistic regression model (2000 bootstrap samples). The score was derived based on the final predictors and the corresponding regression coefficients. Performance for fibrotic NASH was assessed by the receiver operating characteristic curve (AUROC). Rule-out and rule-in cut-offs were derived based on sensitivity ≥0.89 and specificity ≥0.90, respectively.
                         </p>
 
                         <h3 class="fw-bolder mb-3" id="interpretation">Interpretation</h3>
-                        <p>The PNI is a predicted probability score derived from a logistic regression model, and it ranges from 0 to 1.</p>
+                        <p>The FNI is a predicted probability score derived from a logistic regression model, and it ranges from 0 to 1.</p>
 
 
                         <h3 class="fw-bolder mb-3" id="performance">Performance and cut-offs</h3>
@@ -207,7 +209,7 @@
                                     <td>264</td>
                                 </tr>
                                 <tr>
-                                    <td>Progressive NASH, n (%)</td>
+                                    <td>Fibrotic NASH, n (%)</td>
                                     <td>54 (20.5)</td>
                                 </tr>
                                 <tr style="border-bottom: 1px dashed black;">
@@ -216,7 +218,7 @@
                                 </tr>
 
                                 <tr>
-                                    <td colspan="2"><b>PNI ≤ 0.10 (Rule-out zone)</b></td>
+                                    <td colspan="2"><b>FNI ≤ 0.10 (Rule-out zone)</b></td>
                                 </tr>
                                 <tr>
                                     <td>n (%)</td>
@@ -240,7 +242,7 @@
                                 </tr>
 
                                 <tr>
-                                    <td colspan="2"><b>PNI ≥ 0.33 (Rule-in zone)</b></td>
+                                    <td colspan="2"><b>FNI ≥ 0.33 (Rule-in zone)</b></td>
                                 </tr>
 
                                 <tr>
@@ -301,7 +303,7 @@
         </section>
         <!-- Footer-->
         <footer class="py-5 bg-dark">
-            <div class="container px-4"><p class="m-0 text-center text-white">Copyright &copy; PNI calculator 2021</p></div>
+            <div class="container px-4"><p class="m-0 text-center text-white">Copyright &copy; FNI calculator 2021</p></div>
         </footer>
         <!-- Bootstrap core JS-->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -414,13 +416,13 @@
                 var hba1c = hba1c_percentage ? hba1c_val : (hba1c_val / 10.929) + 2.15;
                 var hdl = hdl_mdgl ? hdl_val: hdl_val * 38.67;
                 let temp = Math.exp(-10.33+2.54*Math.log(ast)+3.86*Math.log(hba1c)-1.66*Math.log(hdl));
-                let pni = (temp/(1+temp)).toFixed(2);
-                document.getElementById("pni_value").value = String(pni);
-                pni_perc = String(Math.round(pni*100))
-                document.getElementById("pni_percentage").innerHTML = pni_perc + "% predicted probability<br>of progressive NASH";
+                let FNI = (temp/(1+temp)).toFixed(2);
+                document.getElementById("FNI_value").value = String(FNI);
+                FNI_perc = String(Math.round(FNI*100))
+                document.getElementById("FNI_percentage").innerHTML = FNI_perc + "% predicted probability<br>of Fibrotic NASH";
             } else {
-                document.getElementById("pni_value").value = "NaN";
-                document.getElementById("pni_percentage").innerHTML =  "% predicted probability<br>of progressive NASH";
+                document.getElementById("FNI_value").value = "NaN";
+                document.getElementById("FNI_percentage").innerHTML =  "% predicted probability<br>of Fibrotic NASH";
             }
 
         }
